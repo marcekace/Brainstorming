@@ -4,62 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response(Category::all()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(CategoryRequest $request)
     {
-        //
+        return response(Category::create($request->all())->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        return response(Category::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
+    public function update(CategoryRequest $request, string $id)
     {
-        //
+        Category::findOrFail($id)->update($request->all());
+
+        return response(Category::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
+    public function restore(string $id)
     {
-        //
+        $category = Category::onlyTrashed()->findOrFail($id);
+
+        if ($category->trashed()) {
+            $category->restore();
+            return response($category->toJson(JSON_PRETTY_PRINT), 201);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category)
-    {
-        //
+        return response(
+            boolval(Category::findOrFail($id)->delete()) ? "True" : "False", 201);
     }
 }

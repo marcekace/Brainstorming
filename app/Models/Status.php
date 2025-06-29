@@ -22,7 +22,7 @@ class Status extends Model
     /**
      * @var string
      */
-    protected $table = 'statuses';
+    protected $table = 'status';
 
     /**
      * @var string

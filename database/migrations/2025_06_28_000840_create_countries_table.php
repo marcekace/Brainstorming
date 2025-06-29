@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id()->unique();
-            $table->string('descriptions');//Name of the contry
+            $table->string('description');//Name of the contry
             $table->timestamps();
             $table->softDeletes();
         });

@@ -13,7 +13,7 @@ class Permission extends Model
     /**
      * @var string
      */
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     /**
      * @var bool
@@ -28,7 +28,7 @@ class Permission extends Model
     /**
      * @var string
      */
-    protected $fillable =[
+    protected $fillable = [
         'description',//name of permission
     ];
 

@@ -13,7 +13,7 @@ class Role extends Model
     /**
      * @var string
      */
-    protected $primaryKey= 'id';
+    protected $primaryKey = 'id';
 
     /**
      * @var bool

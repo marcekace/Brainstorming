@@ -14,24 +14,24 @@ class State extends Model
     /**
      * @var string
      */
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     /**
      * @var bool
      */
-    public $incrementing=true;
+    public $incrementing = true;
 
     /**
      * @var string
      */
-    protected $table='states';
+    protected $table = 'states';
 
     /**
      * @var string
      */
-    protected $fillable=[
+    protected $fillable = [
         'description',
-        'country_id', // (FK) 
+        'country_id'
     ];
 
     public function users():hasMany

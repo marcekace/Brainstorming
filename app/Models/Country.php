@@ -14,23 +14,23 @@ class Country extends Model
     /**
      *@var string
     */
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     /**
      *@var bool
     */
-    public $incrementing=true;
+    public $incrementing = true;
 
     /**
      *@var string
     */
-    protected $table='countries';
+    protected $table = 'countries';
 
     /**
      *@var string
     */
-    protected $fillable=[
-        'descriptions',//name of the country
+    protected $fillable = [
+        'description',
     ];
 
     public function states():HasMany

@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
     protected $table = 'users';
 
     /**
@@ -26,8 +27,12 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-        'state_id',// (FK)
-        'role_id',// (FK)
+        'state_id',
+        'role_id',
+    ];
+
+    protected $attributes = [
+        "role_id" => 3,
     ];
 
     /**

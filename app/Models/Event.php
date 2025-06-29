@@ -29,19 +29,20 @@ class Event extends Model
      * @var string
      */
     protected $fillable = [
-        'user_id',//(FK)
+        'user_id',
         'title',
         'description',
         'date_time',
         'location',
         'capacity',
-        'category_id',//(FK)
+        'category_id',
     ];
 
     public function users(): belongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function category(): belongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description');//detailed description of the event
             $table->timestamp('date_time');//date and time of the event
             $table->string('location');//physical or virtual location of the event
-            $table->integer('capacity');//maximum attendees
+            $table->integer('capacity')->nullable();//maximum attendees
             $table->timestamps();
             $table->softDeletes();
         });

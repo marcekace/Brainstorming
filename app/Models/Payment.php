@@ -13,7 +13,7 @@ class Payment extends Model
     /**
      * @var string
      */
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     /**
      * @var bool
@@ -28,7 +28,7 @@ class Payment extends Model
     /**
      * @var string
      */
-    protected $fillable=[
+    protected $fillable = [
         'status',
         'merchant_order',
     ];
