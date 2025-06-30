@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_id');//id of the payment
             $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade');
             $table->unsignedBigInteger('status_id');//subscription status (confirmed, pending, cancelled)
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
+            $table->foreign('status_id')->references('id')->on('status')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
