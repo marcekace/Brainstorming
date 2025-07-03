@@ -21,5 +21,14 @@ class UserSeeder extends Seeder
             "state_id" => 18,
             "role_id" => 1
         ]);
+
+        User::create([
+            "first_name" => "Gabriel",
+            "last_name" => "Ledesma",
+            "email" => "gabialessandroledesma@gmail.com",
+            "password" => bcrypt(env('ADMIN_PASSWORD')),
+            "state_id" => 18,
+            "role_id" => 1,
+        ]);
     }
 }
