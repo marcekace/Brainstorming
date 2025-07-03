@@ -5,6 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\RegistrationController;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
 
 Route::controller(AuthController::class)->group(function () {
     // PUBLIC
@@ -40,3 +46,11 @@ Route::controller(EventController::class)->middleware(["auth:sanctum"])
         Route::patch("/api/v1/events/{id}", "restore")->middleware(["abilities:ADMIN"]);
         Route::delete("/api/v1/events/{id}", "destroy")->middleware(["abilities:ADMIN"]);
 });
+
+Route::controller(RegistrationController::class)->middleware(["auth:sanctum"])
+    ->group(function () {
+        Route::get("/api/v1/registrations", "index");
+        Route::post("/api/v1/registrations", "store");
+        Route::delete("/api/v1/registrations/{registration}", "destroy");
+});
+
