@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             CountrySeeder::class,
             StateSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            CategorySeeder::class,
+            StatusSeeder::class,
+            PaymentSeeder::class,
         ]);
     }
 }
