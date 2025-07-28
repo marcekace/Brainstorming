@@ -4,12 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\StateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistrationController;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -19,11 +17,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post("/api/v1/auth/logout", "logout")->middleware("auth:sanctum");
 });
 
-// ADMIN
-Route::controller(UserController::class)
-    ->group(function () {
-        Route::get("/api/v1/users", "index")->middleware(["auth:sanctum", "abilities:ADMIN"]);
-        Route::post("/api/v1/users", "store");
+
+Route::controller(UserController::class)->group(function () {
+    // ADMIN
+    Route::get("/api/v1/users", "index")->middleware(["auth:sanctum", "abilities:ADMIN"]);
+    // PUBLIC
+    Route::post("/api/v1/users", "store");
 });
 
 // ADMIN
@@ -35,6 +34,29 @@ Route::controller(CategoryController::class)->middleware(["auth:sanctum", "abili
         Route::put("/api/v1/categories/{id}", "update");
         Route::patch("/api/v1/categories/{id}", "restore");
         Route::delete("/api/v1/categories/{id}", "destroy");
+});
+
+// ADMIN
+Route::controller(CountryController::class)->middleware(["auth:sanctum", "abilities:ADMIN"])
+    ->group(function () {
+        Route::get("/api/v1/countries", "index");
+        Route::post("/api/v1/countries", "store");
+        Route::get("/api/v1/countries/{id}", "show");
+        Route::put("/api/v1/countries/{id}", "update");
+        Route::patch("/api/v1/countries/{id}", "restore");
+        Route::delete("/api/v1/categories/{id}", "destroy");
+});
+
+// ADMIN
+Route::controller(StateController::class)->group(function () {
+    // PUBLIC
+    Route::get("/api/v1/states", "index");
+    // ADMIN
+    Route::post("/api/v1/states", "store")->middleware(["auth:sanctum", "abilities:ADMIN"]);
+    Route::get("/api/v1/states/{id}", "show")->middleware(["auth:sanctum", "abilities:ADMIN"]);
+    Route::put("/api/v1/states/{id}", "update")->middleware(["auth:sanctum", "abilities:ADMIN"]);
+    Route::patch("/api/v1/states/{id}", "restore")->middleware(["auth:sanctum", "abilities:ADMIN"]);
+    Route::delete("/api/v1/states/{id}", "destroy")->middleware(["auth:sanctum", "abilities:ADMIN"]);
 });
 
 Route::controller(EventController::class)->middleware(["auth:sanctum"])

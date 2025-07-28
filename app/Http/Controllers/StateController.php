@@ -4,62 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\State;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\StateRequest;
 
 class StateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response(State::all()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StateRequest $request)
     {
-        //
+        return response(State::create($request->all())->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        return response(State::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(State $state)
+    public function update(StateRequest $request, string $id)
     {
-        //
+        State::findOrFail($id)->update($request->all());
+
+        return response(State::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(State $state)
+    public function restore(string $id)
     {
-        //
+        $state = State::onlyTrashed()->findOrFail($id);
+
+        if ($state->trashed()) {
+            $state->restore();
+            return response($state->toJson(JSON_PRETTY_PRINT), 201);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, State $state)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(State $state)
-    {
-        //
+        return response(
+            boolval(State::findOrFail($id)->delete()) ? "True" : "False", 201);
     }
 }

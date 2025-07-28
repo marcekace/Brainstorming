@@ -4,62 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\CountryRequest;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response(Country::all()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(CountryRequest $request)
     {
-        //
+        return response(Country::create($request->all())->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        return response(Country::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Country $country)
+    public function update(CountryRequest $request, string $id)
     {
-        //
+        Country::findOrFail($id)->update($request->all());
+
+        return response(Country::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Country $country)
+    public function restore(string $id)
     {
-        //
+        $country = Country::onlyTrashed()->findOrFail($id);
+
+        if ($country->trashed()) {
+            $country->restore();
+            return response($country->toJson(JSON_PRETTY_PRINT), 201);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Country $country)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Country $country)
-    {
-        //
+        return response(
+            boolval(Country::findOrFail($id)->delete()) ? "True" : "False", 201);
     }
 }
