@@ -34,12 +34,12 @@ class State extends Model
         'country_id'
     ];
 
-    public function users():hasMany
+    public function users(): hasMany
     {
         return $this->hasMany(User::class);
     }
-    public function country():BelongsTo
+    public function country(): BelongsTo
     {
-        return $this->belongsTo(Country::class,'id','country_id');
+        return $this->belongsTo(Country::class);
     }
 }

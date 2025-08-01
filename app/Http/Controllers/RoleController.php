@@ -4,62 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response(Role::withTrashed()->get()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(RoleRequest $request)
     {
-        //
+        return response(Role::create($request->all())->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        return response(Role::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Role $role)
+    public function update(RoleRequest $request, string $id)
     {
-        //
+        Role::findOrFail($id)->update($request->all());
+
+        return response(Role::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
+    public function restore(string $id)
     {
-        //
+        $rol = Role::onlyTrashed()->findOrFail($id);
+
+        if ($rol->trashed()) {
+            $rol->restore();
+            return response($rol->toJson(JSON_PRETTY_PRINT), 201);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Role $role)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Role $role)
-    {
-        //
+        return response([
+            "status" => boolval(Role::findOrFail($id)->delete())
+        ], 201);
     }
 }

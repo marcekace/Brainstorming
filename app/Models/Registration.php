@@ -51,7 +51,7 @@ class Registration extends Model
         return $this->belongsTo(Payment::class, 'payment_id');
     }
 
-    public function statuses():BelongsTo
+    public function status():BelongsTo
     {
         return $this->belongsTo(Status::class, 'status_id');
     }

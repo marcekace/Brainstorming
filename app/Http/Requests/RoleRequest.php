@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,24 +21,20 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            "first_name" => "required|min:2|max:255",
-            "last_name" => "required|min:2|max:255",
-            "state_id" => "required|exists:states,id",
-            "email" => "required|email:rfc,dns|max:255|unique:users,email",
-            "password" => "required|min:8|max:255"
+        $method = $this->getMethod() === "POST";
+        $rules = [
+            "description" => "required|min:4|max:255"
         ];
+
+        return $rules;
     }
 
     public function messages(): array
     {
         return [
             "required" => "El campo :attribute es obligatorio",
-            "email" => "El campo :attribute debe ser un email valido",
             "min" => "El campo :attribute no puede tener menos de :min caracteres",
-            "max" => "El campo :attribute no puede tener mas de :max caracteres",
-            "unique" => "El :attribute ya esta en uso",
-            "exists" => "El :attribute no existe"
+            "max" => "El campo :attribute no puede tener mas de :max caracteres"
         ];
     }
 }

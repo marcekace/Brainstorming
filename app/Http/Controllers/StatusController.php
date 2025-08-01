@@ -4,62 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\StatusRequest;
 
 class StatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response(Status::withTrashed()->get()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StatusRequest $request)
     {
-        //
+        return response(Status::create($request->all())->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        return response(Status::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Status $status)
+    public function update(StatusRequest $request, string $id)
     {
-        //
+        Status::findOrFail($id)->update($request->all());
+
+        return response(Status::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Status $status)
+    public function restore(string $id)
     {
-        //
+        $status = Status::onlyTrashed()->findOrFail($id);
+
+        if ($status->trashed()) {
+            $status->restore();
+            return response($status->toJson(JSON_PRETTY_PRINT), 201);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Status $status)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Status $status)
-    {
-        //
+        return response([
+            "status" => boolval(Status::findOrFail($id)->delete())
+        ], 201);
     }
 }

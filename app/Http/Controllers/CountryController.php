@@ -11,7 +11,7 @@ class CountryController extends Controller
 {
     public function index()
     {
-        return response(Country::all()->toJson(JSON_PRETTY_PRINT), 200);
+        return response(Country::withTrashed()->get()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
     public function store(CountryRequest $request)
@@ -21,7 +21,7 @@ class CountryController extends Controller
 
     public function show(string $id)
     {
-        return response(Country::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
+        return response(Country::withTrashed()->findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
     public function update(CountryRequest $request, string $id)
@@ -43,7 +43,8 @@ class CountryController extends Controller
 
     public function destroy(string $id)
     {
-        return response(
-            boolval(Country::findOrFail($id)->delete()) ? "True" : "False", 201);
+        return response([
+            "status" => boolval(Country::findOrFail($id)->delete())
+        ], 201);
     }
 }

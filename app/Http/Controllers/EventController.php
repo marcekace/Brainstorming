@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Requests\EventRequest;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response(Event::all()->toJson(JSON_PRETTY_PRINT), 200);
+        if ($request->bearerToken() !== null) {
+            return response(Event::with(
+                ["category:id,description"])->withTrashed()->get()->makeHidden(["category_id"])->all(), 200);
+        }
+        return response(Event::with(
+            ["category:id,description"])->get()->makeHidden(["category_id"])->all(), 200);
     }
 
     public function store(EventRequest $request)
@@ -20,7 +26,8 @@ class EventController extends Controller
 
     public function show(string $id)
     {
-        return response(Event::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
+        return response(Event::withTrashed()->with(
+            ["category:id,description"])->findOrFail($id)->makeHidden(["category_id"])->toJson(JSON_PRETTY_PRINT), 200);
     }
 
     public function update(EventRequest $request, string $id)
@@ -42,7 +49,8 @@ class EventController extends Controller
 
     public function destroy(string $id)
     {
-        return response(
-            boolval(Event::findOrFail($id)->delete()) ? "True" : "False", 201);
+        return response([
+            "status" => boolval(Country::findOrFail($id)->delete())
+        ], 201);
     }
 }

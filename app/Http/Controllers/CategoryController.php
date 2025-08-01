@@ -9,8 +9,11 @@ use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->bearerToken() !== null) {
+            return response(Category::withTrashed()->get()->toJson(JSON_PRETTY_PRINT), 200);
+        }
         return response(Category::all()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
@@ -21,7 +24,7 @@ class CategoryController extends Controller
 
     public function show(string $id)
     {
-        return response(Category::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
+        return response(Category::withTrashed()->findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
     }
 
     public function update(CategoryRequest $request, string $id)
@@ -43,7 +46,8 @@ class CategoryController extends Controller
 
     public function destroy(string $id)
     {
-        return response(
-            boolval(Category::findOrFail($id)->delete()) ? "True" : "False", 201);
+        return response([
+            "status" => boolval(Category::findOrFail($id)->delete())
+        ], 201);
     }
 }

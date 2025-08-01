@@ -9,8 +9,12 @@ use App\Http\Requests\StateRequest;
 
 class StateController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->bearerToken() !== null) {
+            return response(State::with(
+                ["country:id,description"])->withTrashed()->get()->makeHidden(["country_id"])->all(), 200);
+        }
         return response(State::all()->toJson(JSON_PRETTY_PRINT), 200);
     }
 
@@ -21,7 +25,8 @@ class StateController extends Controller
 
     public function show(string $id)
     {
-        return response(State::findOrFail($id)->toJson(JSON_PRETTY_PRINT), 200);
+        return response(State::withTrashed()->with(
+            ["country:id,description"])->findOrFail($id)->makeHidden(["country_id"])->toJson(JSON_PRETTY_PRINT), 200);
     }
 
     public function update(StateRequest $request, string $id)
@@ -43,7 +48,8 @@ class StateController extends Controller
 
     public function destroy(string $id)
     {
-        return response(
-            boolval(State::findOrFail($id)->delete()) ? "True" : "False", 201);
+        return response([
+            "status" => boolval(State::findOrFail($id)->delete())
+        ], 201);
     }
 }
